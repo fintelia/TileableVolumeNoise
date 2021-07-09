@@ -174,8 +174,8 @@ int main (int argc, char *argv[])
 		}
 	}
 	{
-		int width = cloudBaseShapeTextureSize*cloudBaseShapeTextureSize;
-		int height = cloudBaseShapeTextureSize;
+		int width = cloudBaseShapeTextureSize;
+		int height = cloudBaseShapeTextureSize*cloudBaseShapeTextureSize;
 		writeTGA("noiseShape.tga",       width, height, cloudBaseShapeTexels);
 		writeTGA("noiseShapePacked.tga", width, height, cloudBaseShapeTexelsPacked);
 	}
@@ -242,8 +242,8 @@ int main (int argc, char *argv[])
 		}
 	}
 	{
-		int width = cloudErosionTextureSize*cloudErosionTextureSize;
-		int height = cloudErosionTextureSize;
+		int width = cloudErosionTextureSize;
+		int height = cloudErosionTextureSize*cloudErosionTextureSize;
 		writeTGA("noiseErosion.tga",       width, height, cloudErosionTexels);
 		writeTGA("noiseErosionPacked.tga", width, height, cloudErosionTexelsPacked);
 	}
