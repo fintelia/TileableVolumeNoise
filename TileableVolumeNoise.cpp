@@ -1,7 +1,7 @@
 
 #include "TileableVolumeNoise.h"
 
-#include "glm\gtc\noise.hpp"
+#include <glm/gtc/noise.hpp>
 #include <math.h>
 
 // Perlin noise based on GLM http://glm.g-truc.net

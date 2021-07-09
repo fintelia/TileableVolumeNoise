@@ -2,7 +2,7 @@
 #ifndef D_TILEABLE3DNOISE
 #define D_TILEABLE3DNOISE
 
-#include "glm\gtc\noise.hpp"
+#include <glm/gtc/noise.hpp>
 
 class Tileable3dNoise
 {

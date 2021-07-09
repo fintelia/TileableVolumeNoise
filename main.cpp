@@ -7,9 +7,6 @@
 #include "./TileableVolumeNoise.h"
 #include "./libtarga.h"
 
-#include <ppl.h>
-using namespace concurrency;
-
 void writeTGA(const char* fileName, int width, int height, /*const*/ unsigned char* data)
 {
 	if (!tga_write_raw(fileName, width, height, data, TGA_TRUECOLOR_32))
@@ -51,7 +48,7 @@ int main (int argc, char *argv[])
 				noise *= 255.0f;
 
 				int addr = r*gPerlinNoiseTextureSize*gPerlinNoiseTextureSize + t*gPerlinNoiseTextureSize + s;
-				perlinNoiseTexels[addr] = unsigned char(noise);
+				perlinNoiseTexels[addr] = (unsigned char)(noise);
 
 			}
 		}
@@ -79,7 +76,7 @@ int main (int argc, char *argv[])
 				noise *= 255.0f;
 
 				int addr = r*gWorleyNoiseTextureSize*gWorleyNoiseTextureSize + t*gWorleyNoiseTextureSize + s;
-				worleyNoiseTexels[addr] = unsigned char(noise);
+				worleyNoiseTexels[addr] = (unsigned char)(noise);
 			}
 		}
 	}
@@ -104,7 +101,7 @@ int main (int argc, char *argv[])
 	int cloudBaseShapeVolumeBytes = cloudBaseShapeSliceBytes * cloudBaseShapeTextureSize;
 	unsigned char* cloudBaseShapeTexels = (unsigned char*)malloc(cloudBaseShapeVolumeBytes);
 	unsigned char* cloudBaseShapeTexelsPacked = (unsigned char*)malloc(cloudBaseShapeVolumeBytes);
-	parallel_for(int(0), int(cloudBaseShapeTextureSize), [&](int s) //for (int s = 0; s<gCloudBaseShapeTextureSize; s++)
+	for (int s = 0; s<cloudBaseShapeTextureSize; s++)
 	{
 		const glm::vec3 normFact = glm::vec3(1.0f / float(cloudBaseShapeTextureSize));
 		for (int t = 0; t<cloudBaseShapeTextureSize; t++)
@@ -154,10 +151,10 @@ int main (int argc, char *argv[])
 				int addr = r*cloudBaseShapeTextureSize*cloudBaseShapeTextureSize + t*cloudBaseShapeTextureSize + s;
 
 				addr *= 4;
-				cloudBaseShapeTexels[addr] = unsigned char(255.0f*PerlinWorleyNoise);
-				cloudBaseShapeTexels[addr + 1] = unsigned char(255.0f*worleyFBM0);
-				cloudBaseShapeTexels[addr + 2] = unsigned char(255.0f*worleyFBM1);
-				cloudBaseShapeTexels[addr + 3] = unsigned char(255.0f*worleyFBM2);
+				cloudBaseShapeTexels[addr] = (unsigned char)(255.0f*PerlinWorleyNoise);
+				cloudBaseShapeTexels[addr + 1] = (unsigned char)(255.0f*worleyFBM0);
+				cloudBaseShapeTexels[addr + 2] = (unsigned char)(255.0f*worleyFBM1);
+				cloudBaseShapeTexels[addr + 3] = (unsigned char)(255.0f*worleyFBM2);
 
 				float value = 0.0;
 				{
@@ -169,14 +166,13 @@ int main (int argc, char *argv[])
 					value = std::fminf(value, 1.0f);
 					value = std::fmaxf(value, 0.0f);
 				}
-				cloudBaseShapeTexelsPacked[addr] = unsigned char(255.0f*value);
-				cloudBaseShapeTexelsPacked[addr + 1] = unsigned char(255.0f*value);
-				cloudBaseShapeTexelsPacked[addr + 2] = unsigned char(255.0f*value);
-				cloudBaseShapeTexelsPacked[addr + 3] = unsigned char(255.0f);
+				cloudBaseShapeTexelsPacked[addr] = (unsigned char)(255.0f*value);
+				cloudBaseShapeTexelsPacked[addr + 1] = (unsigned char)(255.0f*value);
+				cloudBaseShapeTexelsPacked[addr + 2] = (unsigned char)(255.0f*value);
+				cloudBaseShapeTexelsPacked[addr + 3] = (unsigned char)(255.0f);
 			}
 		}
 	}
-	); // end parallel_for
 	{
 		int width = cloudBaseShapeTextureSize*cloudBaseShapeTextureSize;
 		int height = cloudBaseShapeTextureSize;
@@ -197,7 +193,7 @@ int main (int argc, char *argv[])
 	int cloudErosionVolumeBytes = cloudErosionSliceBytes * cloudErosionTextureSize;
 	unsigned char* cloudErosionTexels = (unsigned char*)malloc(cloudErosionVolumeBytes);
 	unsigned char* cloudErosionTexelsPacked = (unsigned char*)malloc(cloudErosionVolumeBytes);
-	parallel_for(int(0), int(cloudErosionTextureSize), [&](int s) //for (int s = 0; s<gCloudErosionTextureSize; s++)
+	for (int s = 0; s<cloudErosionTextureSize; s++)
 	{
 		const glm::vec3 normFact = glm::vec3(1.0f / float(cloudErosionTextureSize));
 		for (int t = 0; t<cloudErosionTextureSize; t++)
@@ -229,23 +225,22 @@ int main (int argc, char *argv[])
 
 				int addr = r*cloudErosionTextureSize*cloudErosionTextureSize + t*cloudErosionTextureSize + s;
 				addr *= 4;
-				cloudErosionTexels[addr] = unsigned char(255.0f*worleyFBM0);
-				cloudErosionTexels[addr + 1] = unsigned char(255.0f*worleyFBM1);
-				cloudErosionTexels[addr + 2] = unsigned char(255.0f*worleyFBM2);
-				cloudErosionTexels[addr + 3] = unsigned char(255.0f);
+				cloudErosionTexels[addr] = (unsigned char)(255.0f*worleyFBM0);
+				cloudErosionTexels[addr + 1] = (unsigned char)(255.0f*worleyFBM1);
+				cloudErosionTexels[addr + 2] = (unsigned char)(255.0f*worleyFBM2);
+				cloudErosionTexels[addr + 3] = (unsigned char)(255.0f);
 
 				float value = 0.0;
 				{
 					value = worleyFBM0*0.625f + worleyFBM1*0.25f + worleyFBM2*0.125f;
 				}
-				cloudErosionTexelsPacked[addr] = unsigned char(255.0f * value);
-				cloudErosionTexelsPacked[addr + 1] = unsigned char(255.0f * value);
-				cloudErosionTexelsPacked[addr + 2] = unsigned char(255.0f * value);
-				cloudErosionTexelsPacked[addr + 3] = unsigned char(255.0f);
+				cloudErosionTexelsPacked[addr] = (unsigned char)(255.0f * value);
+				cloudErosionTexelsPacked[addr + 1] = (unsigned char)(255.0f * value);
+				cloudErosionTexelsPacked[addr + 2] = (unsigned char)(255.0f * value);
+				cloudErosionTexelsPacked[addr + 3] = (unsigned char)(255.0f);
 			}
 		}
 	}
-	); // end parallel_for
 	{
 		int width = cloudErosionTextureSize*cloudErosionTextureSize;
 		int height = cloudErosionTextureSize;
